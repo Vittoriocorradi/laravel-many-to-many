@@ -36,6 +36,9 @@
                 <div class="col-4">
                     <div>Status: {{ $project->status }}</div>
                     <div>Type: {{ $project->type?->name ?: 'No type' }}</div>
+                    <div>Technologies: 
+                        {{ $project->technologies->implode('name', ', ') }}
+                    </div>
                     <div>Priority: {{ $project->priority }}</div>
                 </div>
                 @if ($project->contributors > 0)
