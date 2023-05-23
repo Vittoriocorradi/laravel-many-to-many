@@ -6,6 +6,7 @@ use App\Models\Project;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Http\Controllers\Controller;
+use App\Models\Technology;
 use App\Models\Type;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -31,8 +32,9 @@ class ProjectController extends Controller
     public function create()
     {
         $types = Type::all();
+        $technologies = Technology::all();
 
-        return view('admin.projects.create', compact('types'));
+        return view('admin.projects.create', compact('types', 'technologies'));
     }
 
     /**
@@ -45,17 +47,21 @@ class ProjectController extends Controller
     {
         $request->validated();
         $data = $request->all();
-        // $data = $request->validated();
+
+        $newProject = new Project();                        //Instanza di un nuovo oggetto
         
-        $newProject = new Project();
-        
-        $newProject->fill($data);
-        $newProject->slug = Str::slug($data['title']);
+        $newProject->fill($data);                           //Riempire la tabella con dati non guarded
+
+        $newProject->slug = Str::slug($data['title']);      //Aggiungere lo slug alla tabella
         if(isset($data['image'])) {
-            $newProject->image = Storage::put('uploads', $data['image']);
+            $newProject->image = Storage::put('uploads', $data['image']);       //Se presente un immagine nel form, salvare l'immagine nello storage
         }
 
-        $newProject->save();
+        $newProject->save();        //Salva sulla tabella i campi
+
+        if(isset($data['technologies'])) {
+            $newProject->technologies()->sync($data['technologies']);       //Se selezionate delle tecnologie nel form, riempire la tabella project_technologies
+        }
 
         return to_route('admin.projects.index')->with('message', $newProject->title.' was created successfully');
     }

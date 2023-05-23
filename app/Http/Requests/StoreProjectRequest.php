@@ -36,6 +36,7 @@ class StoreProjectRequest extends FormRequest
             'is_finished' => 'digits:1|integer|between:0,1',
             'image' => 'nullable|image|max:2048',
             'type_id' => 'nullable|exists:types,id',
+            'technologies' => 'nullable|exists:technologies,id'
         ];
     }
 }
