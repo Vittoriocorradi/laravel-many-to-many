@@ -37,7 +37,7 @@
                     <div>Status: {{ $project->status }}</div>
                     <div>Type: {{ $project->type?->name ?: 'No type' }}</div>
                     <div>Technologies: 
-                        {{ $project->technologies->implode('name', ', ') }}
+                        {{ $project->technologies->implode('name', ', ') ?: 'No technologies'}}
                     </div>
                     <div>Priority: {{ $project->priority }}</div>
                 </div>
