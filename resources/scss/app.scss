@@ -1,0 +1,11 @@
+@import '~bootstrap/scss/bootstrap';
+
+
+.alert-container {
+
+    height: 3.125rem;
+
+    .ms-alert {
+        transition: opacity 0.5s;
+    }
+}
