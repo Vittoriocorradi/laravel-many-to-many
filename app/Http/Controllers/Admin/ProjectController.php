@@ -85,7 +85,9 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        return view('admin.projects.edit', compact('project'));
+        $technologies = Technology::all();
+
+        return view('admin.projects.edit', compact('project', 'technologies'));
     }
 
     /**
@@ -101,12 +103,25 @@ class ProjectController extends Controller
         $data = $request->all();
 
         $project->slug = Str::slug($data['title']);
+
         if(isset($data['image'])) {
             if($project->image) {
                 Storage::delete($project->image);
             }
             $project->image = Storage::put('uploads', $data['image']);
+        } elseif (empty($data['image'])) {
+            if($project->image) {
+                Storage::delete($project->image);
+                $project->image = null;
+            }
         }
+
+        if(isset($data['technologies'])) {
+            $project->technologies()->sync($data['technologies']);
+        } else {
+            $project->technologies()->detach();
+        }
+
         $project->update($data);
         return to_route('admin.projects.index')->with('message', $project->title.' has been edited successfully');
     }

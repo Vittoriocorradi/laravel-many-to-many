@@ -66,7 +66,6 @@
                         <label class="form-check-label" for="technologies">{{ $technology->name }}</label>
                     </div>
                 @endforeach
-
             </div>
             <div class="mb-3">
                 <label for="priority" class="form-label">Priority</label>
